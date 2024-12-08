@@ -1,7 +1,7 @@
 import pgzrun
 import random
-WIDTH=400
-HEIGHT=400
+WIDTH=700
+HEIGHT=650
 level=10
 list=("bag2","bottleimg","chipsimg")
 win=False
@@ -9,9 +9,9 @@ lose=False
 currentlevel=1
 items=[]
 animation=[]
-speed=10
+speed=30
 def draw():
-    screen.blit(bg,(0,0))
+    screen.blit("sweetshoppg",(0,0))
     if lose:
         screen.draw.text("you lost",(200,200),fontsize=60,color="white")
     elif win:
@@ -23,6 +23,7 @@ def update():
     global items
     if len(items)==0:
         items=mega_funtion(currentlevel)
+
 
 
 
@@ -73,7 +74,37 @@ def animators(num2):
 def gameovers():
     global lose
 
+
     lose=True
+
+def on_mouse_down(pos):
+    for i in items:
+        if i.collidepoint(pos):
+         if "paperimg" in i.image:
+             completed()
+         else:
+             gameovers()
+def completed():
+    global animation
+    sa(animation)
+    global currentlevel
+    global level
+    global items
+    global win
+    if currentlevel==level:
+        win=True
+    else:
+        currentlevel+=1
+        items=[]
+        animation=[]
+            
+def sa(bob):
+    for i in bob:
+        if i.running:
+            i.stop()
+
+
+
 
 pgzrun.go()
 
