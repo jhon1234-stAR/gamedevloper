@@ -2,20 +2,24 @@
 import pgzrun
 TITLE="BOB"
 
-
-
-WIDTH=801
-HEIGHT=500
-
-
-scrollybox=Rect(1,1,800,81)
-boxy=Rect(21,100,600,91)
-ans1=Rect(21,212,130,91)
-ans2=Rect(173,212,130,91)
-ans3=Rect(21,323,130,91)
-ans4=Rect(173,323,130,91)
-timey=Rect(630,100,121,91)
-skipy=Rect((630,212,121,185))
+score=0
+totaltime=30
+WIDTH=871
+HEIGHT=651
+qfile="questions.txt"
+gameover=False
+win=False
+q=[]
+qcount=0
+qinex=0
+scrollybox=Rect(1,1,872,81)
+boxy=Rect(21,100,600,151)
+ans1=Rect(21,270,300,151)
+ans2=Rect(370,270,300,151)
+ans3=Rect(20,450,300,151)
+ans4=Rect(370,450,300,151)
+timey=Rect(700,100,121,151)
+skipy=Rect((700,270,121,330))
 
 def draw():
     screen.clear()
@@ -29,11 +33,25 @@ def draw():
     screen.draw.filled_rect(timey,"yellow") 
     screen.draw.filled_rect(skipy,"yellow")
 
+    txt=f"welcome to the quiz!!question number:{qinex} of {qcount}  "
+    screen.draw.textbox(txt,scrollybox,color="black")
+    screen.draw.textbox(str(totaltime),timey,color="black")
+    screen.draw.textbox("skip",skipy,color="black",angle=-90)
 
+def readquestions():
+    global qcount
+    with open (qfile) as d:
+        for i in d:
+            q.append(i)
+            qcount+=1
 
+def update():
+    scrollybox.x-=2
+    if scrollybox.right<0:
+        scrollybox.x=871
 
-
-
+readquestions()
+print(q)
 pgzrun.go()
 
 
