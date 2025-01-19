@@ -3,7 +3,7 @@ import pgzrun
 TITLE="BOB"
 
 score=0
-totaltime=30
+timeleft=30
 WIDTH=871
 
 HEIGHT=651
@@ -37,13 +37,14 @@ def draw():
 
     txt=f"welcome to the quiz!!question number:{qinex} of {qcount}  "
     screen.draw.textbox(txt,scrollybox,color="black",shadow=(0.5,0.5),scolor="red")
-    screen.draw.textbox(str(totaltime),timey,color="black",shadow=(0.5,0.5),scolor="red")
+    screen.draw.textbox(str(timeleft),timey,color="black",shadow=(0.5,0.5),scolor="red")
     screen.draw.textbox("skip",skipy,color="black",angle=-90,shadow=(0.5,0.5),scolor="red")
     screen.draw.textbox(question[0],boxy,color="black",shadow=(0.5,0.5),scolor="red")
     hi=1
     for i in aboxys:
-        screen.draw.textbox(question[hi],i,color="black",shadow=(0.5,0.5),scolor="red")
+        screen.draw.textbox(question[hi].strip(),i,color="black",shadow=(0.5,0.5),scolor="red")
         hi+=1
+    
 
 def readquestions():
     global qcount
@@ -57,15 +58,70 @@ def update():
     if scrollybox.right<0:
         scrollybox.x=871
 
-readquestions()
 def nextquestions():
     global qinex
 
     qinex+=1
     return q.pop(0).split("|")
+def bobisalwaywrong():
+    global gameover,timeleft,question
+    mes=f"gameover you got {score}/11"
+    question=[mes,"_","_","_","_",0]
+    timeleft=0
+    gameover=True
+
+
+def bobiscorrect():
+    global timeleft
+    global question
+    global score
+    score+=1
+    if q:
+        question=nextquestions()
+        timeleft=30
+    else:
+        bobisalwaywrong()
 
 
 
+def on_mouse_down(pos):
+    box=1
+
+    for i in aboxys:
+        if i.collidepoint(pos):
+            if box is int(question[5]):
+                bobiscorrect()
+            else:
+                bobisalwaywrong()
+        box+=1
+    if skipy.collidepoint(pos):
+        s()
+def timer():
+    global timeleft
+    if timeleft:
+        timeleft-=1
+    else:
+        bobisalwaywrong()
+    
+
+
+def s():
+    global timeleft,question
+    if q:
+        question=nextquestions()
+        timeleft=30
+    else:
+        bobisalwaywrong()
+
+
+
+
+
+
+
+
+clock.schedule_interval(timer,1)
+readquestions()
 question=nextquestions()
 
 pgzrun.go()
