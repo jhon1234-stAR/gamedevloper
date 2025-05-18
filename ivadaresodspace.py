@@ -28,27 +28,44 @@ def draw():
     screen.blit(hlpt2,(1000,20))
     screen.blit(s1,(s1r.x,s1r.y))
     screen.blit(s2,(s2r.x,s2r.y))
-    gt=font.render(f"player{winner} wins",True,"red")
+    gt=font.render(f"player {winner} wins",True,"black")
     if gameover:
-        screen.blit(gt,(800,800))
+        screen.fill("red")
+        screen.blit(gt,(150,450))
     for i in b1:
         pygame.draw.rect(screen,"blue",i)
     for i in b2:
         pygame.draw.rect(screen,"blue",i)
     
 def s1rmove(keys_pressed):
-    if keys_pressed[pygame.K_w]:
+    if keys_pressed[pygame.K_w] and s1r.y>0:
+
+        
         s1r.y-=5
-    if keys_pressed[pygame.K_s]:
+    if keys_pressed[pygame.K_s] and s1r.y<780:
         s1r.y+=5
 def s2rmove(keys_pressed):
-    if keys_pressed[pygame.K_UP]:
+    if keys_pressed[pygame.K_UP ] and s2r.y>0:
         s2r.y-=5
-    if keys_pressed[pygame.K_DOWN]:
+    if keys_pressed[pygame.K_DOWN] and s2r.y<780:
         s2r.y+=5
+
+def gamesover():
+    global plh1, winner, plh2, gameover
+    if plh2==0:
+        gameover=True
+        winner="yellow "
+    if plh1==0:
+        gameover=True
+        winner="red "
+
+
+
+
 #bulletmovement
 def bmove(b1,b2):
     global plh1,plh2
+    
     for i in b1:
         i.x+=5
         if s2r.colliderect(i):
@@ -63,6 +80,7 @@ def bmove(b1,b2):
             plh1-=1
         elif i.x<0:
             b2.remove(i)
+        
     
     
             
@@ -91,6 +109,7 @@ while True:
     keys_pressed=pygame.key.get_pressed()
     s1rmove(keys_pressed)
     s2rmove(keys_pressed)
+    gamesover()
     
 
     pygame.display.update()
