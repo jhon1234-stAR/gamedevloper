@@ -57,7 +57,7 @@ def gamesover():
         winner="yellow "
     if plh1==0:
         gameover=True
-        winner="red "
+        winner="red"
 
 
 
